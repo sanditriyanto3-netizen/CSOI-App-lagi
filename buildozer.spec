@@ -10,7 +10,7 @@ source.include_patterns = icons/*.png
 
 version = 1.0
 
-requirements = python3==3.11.6,kivy==2.3.0
+requirements = python3==3.11.6,hostpython3==3.11.6,kivy==2.3.0
 icon.filename = %(source.dir)s/icon.png
 presplash.filename = %(source.dir)s/presplash.png
 
