@@ -12,21 +12,35 @@ jobs:
       - name: Checkout kode
         uses: actions/checkout@v4
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependensi sistem
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip \
+            autoconf libtool pkg-config zlib1g-dev libncurses-dev \
+            libncursesw5-dev cmake libffi-dev libssl-dev automake build-essential
+
+      - name: Install Buildozer & Cython
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade Cython==0.29.33 buildozer
+
       - name: Cache Buildozer global
         uses: actions/cache@v4
         with:
-          path: .buildozer_global
+          path: ~/.buildozer
           key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
       - name: Build APK dengan Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+        run: |
+          yes | buildozer -v android debug
 
       - name: Upload APK sebagai artifact
         uses: actions/upload-artifact@v4
         with:
           name: CSOI-Live-Indicator-APK
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: bin/*.apk
