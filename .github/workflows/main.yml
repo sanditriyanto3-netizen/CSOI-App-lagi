@@ -1,0 +1,32 @@
+name: Build CSOI APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout kode
+        uses: actions/checkout@v4
+
+      - name: Cache Buildozer global
+        uses: actions/cache@v4
+        with:
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+
+      - name: Build APK dengan Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
+
+      - name: Upload APK sebagai artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CSOI-Live-Indicator-APK
+          path: ${{ steps.buildozer.outputs.filename }}
