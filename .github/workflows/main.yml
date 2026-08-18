@@ -29,6 +29,11 @@ jobs:
           pip install --upgrade pip
           pip install --upgrade Cython==0.29.33 buildozer
 
+      - name: Kunci versi pip agar tidak kena bug upgrade
+        run: |
+          echo "pip==24.0" > /tmp/pip-constraint.txt
+          echo "PIP_CONSTRAINT=/tmp/pip-constraint.txt" >> $GITHUB_ENV
+
       - name: Cache Buildozer global
         uses: actions/cache@v4
         with:
